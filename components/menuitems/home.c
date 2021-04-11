@@ -82,9 +82,9 @@ void settings(void *args) {
 }
 
 void weather(void *args) {
-    ESP_LOGI("METHOD CALLED", "WE CALLED METHOD settings \n");
+    ESP_LOGI("METHOD CALLED", "WE CALLED METHOD weather \n");
 
-    launchSettingsMenu();
+    launchWeatherMenu();
 }
 
 /**
