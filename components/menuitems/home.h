@@ -19,6 +19,7 @@
 #include "MenuItem.h"
 #include "LCD/LCD.h"
 #include "settings.h"
+#include "weather.h"
 
 #include "esp_log.h"
 
@@ -34,6 +35,7 @@ void whiteNoise();
 void reminders();
 void suspendHome();
 void settings();
+void weather();
 void terminateHome();
 
 

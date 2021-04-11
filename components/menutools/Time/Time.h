@@ -26,6 +26,7 @@
 #include "esp_sleep.h"
 #include "../menutools/LCD/LCD.h"
 #include "audioController.h"
+#include "../menutools/Weather/Weather.h"
 
 void time_init();
 void getTime();

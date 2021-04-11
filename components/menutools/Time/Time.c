@@ -29,6 +29,8 @@ void time_init()
         printf("Waiting for system time to be set... (%d/%d) \n", retry, retry_count);
         vTaskDelay(2000 / portTICK_PERIOD_MS);
     }
+
+    weatherInit();
     getTime();
 }
 

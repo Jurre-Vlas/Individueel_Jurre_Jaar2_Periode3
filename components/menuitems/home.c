@@ -1,6 +1,6 @@
 #include "home.h"
 
-static int size = 7;
+static int size = 8;
 
 static MenuItem menuItems[] = {
         {"Radio", "Radio",
@@ -16,7 +16,9 @@ static MenuItem menuItems[] = {
         {"Reminders", "Herinneringen",
          &reminders},
         {"Settings", "Instellingen",
-         &settings}};
+         &settings},
+        {"Weather", "weer",
+                &weather}};
 
 /**
  * Launches the Home menutools.
@@ -76,6 +78,12 @@ void reminders(void *args) {
 
 void settings(void *args) {
     ESP_LOGI("METHOD CALLED", "WE CALLED METHOD settings \n");
+    launchSettingsMenu();
+}
+
+void weather(void *args) {
+    ESP_LOGI("METHOD CALLED", "WE CALLED METHOD settings \n");
+
     launchSettingsMenu();
 }
 
