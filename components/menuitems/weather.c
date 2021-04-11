@@ -1,23 +1,42 @@
 //
-// Created by kroelie woelie on 11-4-2021.
+// Created by Davy on 19-3-2021.
 //
 
+#include "settings.h"
 
-#include "weather.h"
-
-static int size = 2;
+static int size = 5;
 
 static MenuItem menuItems[] = {
-        {"Working", "het werkt", &launchWeatherMenu},
-        {"Return", "Terug", &returnFromWeather}};
+        {"Winter Time", "Winter tijd", &setWinterTime},
+        {"Summer Time", "Zomer tijd",&setSummertime},
+        {"Set Dutch", "Zet Nederlands", &setLanguageNL},
+        {"Set English", "Zet Engels",&setLanguageEN},
+        {"Return", "Terug", &returnFromSettings}};
 
 
-void launchWeatherMenu() {
-    setMenu(menuItems, size, "| Weather |", "| Weer |");
+void launchSettingsMenu() {
+    setMenu(menuItems, size, "| Settings |", "| Instellingen |");
 }
 
+void setWinterTime() {
+    setLocalSummerTime();
+};
 
-void returnFromWeather() {
+void setSummertime() {
+    setLocalWinterTime();
+};
+
+void setLanguageNL() {
+    setLangToNL();
+    launchSettingsMenu();
+};
+
+void setLanguageEN() {
+    setLangToEN();
+    launchSettingsMenu();
+};
+
+void returnFromSettings() {
     ESP_LOGI("RETURN", "");
     //DON'T FORGET TO TERMINATE ALL METHODS HERE.
     launchHomeMenu();

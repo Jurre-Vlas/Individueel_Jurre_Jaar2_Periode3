@@ -1,9 +1,9 @@
 //
-// Created by kroelie woelie on 11-4-2021.
+// Created by Davy on 19-3-2021.
 //
 
-#ifndef SMARTSPEAKER_WEATHER_H
-#define SMARTSPEAKER_WEATHER_H
+#ifndef SMARTSPEAKER_SETTINGS_H
+#define SMARTSPEAKER_SETTINGS_H
 
 #include <stdio.h>
 #include <freertos/FreeRTOS.h>
@@ -13,8 +13,14 @@
 #include "home.h"
 #include "LCD/LCD.h"
 #include "esp_log.h"
+#include "../menutools/Time/Time.h"
 
-void launchWeatherMenu();
-void returnFromWeather();
+void launchSettingsMenu();
+void setWinterTime();
+void setSummertime();
+void setLanguageNL();
+void setLanguageEN();
+void returnFromSettings();
 
-#endif //SMARTSPEAKER_WEATHER_H
+
+#endif //SMARTSPEAKER_SETTINGS_H
