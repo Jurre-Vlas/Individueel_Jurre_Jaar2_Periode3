@@ -7,8 +7,8 @@ static MenuItem menuItems[] = {
          &internetRadio},
         {"Bluetooth", "Bluetooth",
          &bluetooth},
-        {"Karaoke", "Meezingen",
-         &karaoke},
+        {"Talking Clock", "Pratende Klok",
+         &talkingClock},
         {"MP3 player", "MP3 speler",
          &mp3},
         {"Whitenoise", "Rustgeluid",
@@ -43,11 +43,11 @@ void bluetooth(void *args) {
 }
 
 /**
- * Responds to the selection of the 'Karaoke' item".
+ * Responds to the selection of the 'Talking Clock' item".
  */
-void karaoke(void *args) {
-    ESP_LOGI("METHOD CALLED", "WE CALLED METHOD karaoke \n");
-    launchKaraokeMenu();
+void talkingClock(void *args) {
+    ESP_LOGI("METHOD CALLED", "WE CALLED METHOD Talking clock \n");
+    launchTalkingClockMenu();
 }
 
 /**

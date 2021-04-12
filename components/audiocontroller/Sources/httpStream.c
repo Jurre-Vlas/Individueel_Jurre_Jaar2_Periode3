@@ -48,7 +48,7 @@ void httpstream_init(audio_pipeline_handle_t *pipeline)
     ESP_LOGI(TAG, "Done initializing");
 }
 
-void httpstream_settarget(audio_pipeline_handle_t *pipeline, char *target)
+void httpstream_settarget(audio_pipeline_handle_t *pipeline, char* target)
 {
     ESP_LOGI(TAG, "Stopping pipeline");
     audio_pipeline_stop(*pipeline);

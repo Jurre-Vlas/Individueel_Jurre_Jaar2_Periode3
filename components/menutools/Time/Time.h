@@ -25,6 +25,7 @@
 #include "esp_attr.h"
 #include "esp_sleep.h"
 #include "../menutools/LCD/LCD.h"
+#include "audioController.h"
 
 void time_init();
 void getTime();

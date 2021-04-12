@@ -1,9 +1,0 @@
-
-
-#ifndef SMARTSPEAKER_WEATHER_H
-#define SMARTSPEAKER_WEATHER_H
-
-
-void weatherInit();
-
-#endif //SMARTSPEAKER_WEATHER_H

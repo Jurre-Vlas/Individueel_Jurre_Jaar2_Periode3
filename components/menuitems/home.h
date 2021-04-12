@@ -12,7 +12,7 @@
 
 #include "internetradio.h"
 #include "bluetooth.h"
-#include "karaoke.h"
+#include "klok.h"
 #include "mp3.h"
 #include "whitenoise.h"
 #include "reminders.h"
@@ -28,7 +28,7 @@
 void launchHomeMenu();
 void internetRadio();
 void bluetooth();
-void karaoke();
+void talkingClock();
 void mp3();
 void whiteNoise();
 void reminders();

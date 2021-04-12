@@ -15,11 +15,14 @@
 #include "LCD/LCD.h"
 #include "esp_log.h"
 
+#include "audioController.h"
+
 void launchMP3Menu();
+void play();
+void stop();
 
-void Play();
-
-void Stop();
+void next();
+void previous();
 
 void returnFromMp3();
 
