@@ -30,6 +30,7 @@
 void time_init();
 void getTime();
 void setTime();
+void getZone(char *tz, char *Code );
 void initialize_sntp(void);
 void setLocalSummerTime();
 void setLocalWinterTime();

@@ -18,7 +18,7 @@
 
 void launchTalkingClockMenu();
 
-void StartTalkingClock();
+void DutchTime();
 
 void returnFromTalkingClock();
 

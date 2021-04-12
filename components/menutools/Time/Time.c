@@ -16,6 +16,10 @@ char strftime_buf[64];
 time_t now = 0;
 char *hour;
 char *min;
+
+char *TimeZone;
+char *Location;
+
 int SorWTime = 0;
 
 void time_init()
@@ -29,6 +33,8 @@ void time_init()
         printf("Waiting for system time to be set... (%d/%d) \n", retry, retry_count);
         vTaskDelay(2000 / portTICK_PERIOD_MS);
     }
+
+    getZone("TZ", "CET-1CEST,M3.5.0,M10.5.0/3" );
     getTime();
 }
 
@@ -95,14 +101,15 @@ char *dest2_buff = "";
 char hourPlayed[4] = "";
 int firstRun = 1;
 
+void getZone(char *tz, char *Code ){
+    TimeZone = tz;
+    Location = Code;
+}
+
 void getTime()
 {
-    //ESP_LOGI("@#@#@# The current winter or summer time is : ", "%i", SorWTime);
-
-    if (!SorWTime)
-    {
         time(&now);
-        setenv("TZ", "CET-1CEST,M3.5.0,M10.5.0/3", 1);
+        setenv(TimeZone, Location, 1);
         tzset();
         localtime_r(&now, &timeinfo);
         strftime(strftime_buf, sizeof(strftime_buf), "%c", &timeinfo);
@@ -129,48 +136,7 @@ void getTime()
 
         min = substr(strftime_buf, 14, 16);
 
-        //    ESP_LOGI("DEST1", "%s", dest);
-        //    vTaskDelay(30 / portTICK_PERIOD_MS);
-    }
 
-    if (SorWTime)
-    {
-        time(&now);
-
-        setenv("TZ", "MET-2METDST,M3.5.0/01,M10.5.0/0", 1);
-        tzset();
-        localtime_r(&now, &timeinfo);
-        strftime(strftime_buf, sizeof(strftime_buf), "%c", &timeinfo);
-
-        vTaskDelay(30 / portTICK_PERIOD_MS);
-        char *dest = substr(strftime_buf, 11, 20);
-        vTaskDelay(30 / portTICK_PERIOD_MS);
-        char *dest2 = substr(strftime_buf, 0, 4);
-
-        if (strcmp(dest2, dest2_buff) != 0)
-        {
-            writeToLineAndCol(dest2, 0, 0);
-            dest2_buff = dest2;
-        }
-
-        vTaskDelay(30 / portTICK_PERIOD_MS);
-
-        if (strcmp(dest, dest_buff) != 0)
-        {
-            writeToLineAndCol(dest, 0, 4);
-            dest_buff = dest;
-        }
-
-        hour = substr(strftime_buf, 11, 13);
-
-        min = substr(strftime_buf, 14, 16);
-
-        //    ESP_LOGI("DEST1", "%s", dest);
-        //    vTaskDelay(30 / portTICK_PERIOD_MS);
-        ESP_LOGI(TAG, "Time: %s:%s", hour, min);
-    }
-
-    //Play time every hour
     if (strcmp(hourPlayed, hour))
     {
         strcpy(hourPlayed, hour);

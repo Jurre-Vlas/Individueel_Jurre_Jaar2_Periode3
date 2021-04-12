@@ -1,27 +1,25 @@
-//
-// Created by Davy on 15-3-2021.
-//
 
 #include "klok.h"
 
 static int size = 2;
 
 static MenuItem menuItems[] = {
-        {"Say time", "Zeg tijd",  &StartTalkingClock},
+        {"Dutch Time", "Nederlandse Tijd",  &DutchTime},
         {"Return", "Terug", &returnFromTalkingClock}};
 
 
 void launchTalkingClockMenu() {
-    setMenu(menuItems, size, "| Talking Clock |", "| Pratende Klok |");
+    setMenu(menuItems, size, "| Time |", "| Klok |");
 }
 
-void StartTalkingClock(){
+void DutchTime(){
     ESP_LOGI("Starting a talking clock song now...", "");
+    getZone("TZ", "CET-1CEST,M3.5.0,M10.5.0/3");
+    getTime();
     play_time();
 };
 
 void returnFromTalkingClock(){
     ESP_LOGI("RETURN", "");
-    //DON'T FORGET TO TERMINATE ALL METHODS HERE.
     launchHomeMenu();
 };

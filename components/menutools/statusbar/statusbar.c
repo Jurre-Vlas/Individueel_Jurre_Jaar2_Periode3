@@ -45,7 +45,7 @@ void statusbar_update() {
         writeToLineAndCol(wifi_stat ? "\x0B" : "x", 0, 19);
         wifi_buff = wifi_stat;
     }
-    getTime(0);
+    getTime();
 }
 
 void statusbar_update_task(void *pvParameters) {
