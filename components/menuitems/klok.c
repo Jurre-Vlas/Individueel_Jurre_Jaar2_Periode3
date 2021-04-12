@@ -19,6 +19,14 @@ void DutchTime(){
     play_time();
 };
 
+void newZeland(){
+    ESP_LOGI("Starting a talking clock song now...", "");
+    getZone("TZ", "NZST-12NZDT-13,M10.1.0/02:00:00,M3.3.0/03:00:00");
+    getTime();
+    play_time();
+};
+
+
 void returnFromTalkingClock(){
     ESP_LOGI("RETURN", "");
     launchHomeMenu();
