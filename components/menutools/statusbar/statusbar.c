@@ -56,7 +56,7 @@ void statusbar_update_task(void *pvParameters) {
 
     bluetooth_buff = bluetooth_stat;
     wifi_buff = wifi_stat;
-    time_init();
+    timeInit();
     while (1) {
 //        ESP_LOGD(TAG, "Updating statusbar");
         wifi_stat = getWifiStatus();

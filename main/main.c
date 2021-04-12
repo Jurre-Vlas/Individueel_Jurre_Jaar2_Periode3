@@ -14,6 +14,8 @@
 #include "wifiController.h"
 #include "AudioSetup/AudioSetup.h"
 #include "audioRecognition.h"
+#include "wifiController.h"
+
 
 #define SDA_GPIO 18
 #define SCL_GPIO 23

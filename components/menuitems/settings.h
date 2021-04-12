@@ -16,8 +16,6 @@
 #include "../menutools/Time/Time.h"
 
 void launchSettingsMenu();
-void setWinterTime();
-void setSummertime();
 void setLanguageNL();
 void setLanguageEN();
 void returnFromSettings();

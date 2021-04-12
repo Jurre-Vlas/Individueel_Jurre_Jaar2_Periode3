@@ -7,10 +7,9 @@
 #define SCL_GPIO 23
 #define I2C_ADDR 0x27
 
-void initialize_sntp(void);
 
 static const char *TAG = "Time";
-static int started = 0;
+
 struct tm timeinfo = {0};
 char strftime_buf[64];
 time_t now = 0;
@@ -22,9 +21,9 @@ char *Location;
 
 int SorWTime = 0;
 
-void time_init()
+void timeInit()
 {
-    initialize_sntp();
+    initializeSntp();
     // wait for time to be set
     int retry = 0;
     int retry_count = 10;
@@ -38,20 +37,10 @@ void time_init()
     getTime();
 }
 
-void setLocalSummerTime()
-{
-    SorWTime = 0;
-};
-
-void setLocalWinterTime()
-{
-    SorWTime = 1;
-};
-
-static char itis_loc[40] = {
+static char itIsLoc[40] = {
     "/sdcard/res/itis.mp3"};
 
-static char hour_arr[12][40] = {
+static char hourArr[12][40] = {
     "/sdcard/res/12.mp3", // 12
     "/sdcard/res/1.mp3",  // 1
     "/sdcard/res/2.mp3",  // 2
@@ -66,7 +55,8 @@ static char hour_arr[12][40] = {
     "/sdcard/res/11.mp3", // 11
 };
 
-static char min_arr[4][40] = {
+
+static char minArr[4][40] = {
     "/sdcard/res/uur.mp3",  // Uur
     "/sdcard/res/kwO.mp3",  // Kwart over
     "/sdcard/res/half.mp3", // Half
@@ -136,6 +126,8 @@ void getTime()
 
         min = substr(strftime_buf, 14, 16);
 
+        printf("min");
+
 
     if (strcmp(hourPlayed, hour))
     {
@@ -146,12 +138,12 @@ void getTime()
         }
         else
         {
-            play_time();
+            playTime();
         }
     }
 }
 
-void initialize_sntp(void)
+void initializeSntp(void)
 {
     ESP_LOGI(TAG, "Initializing SNTP");
     sntp_setoperatingmode(SNTP_OPMODE_POLL);
@@ -159,7 +151,7 @@ void initialize_sntp(void)
     sntp_init();
 }
 
-void play_time()
+void playTime()
 {
     int hour_int = atoi(hour);
     int min_int = atoi(min);
@@ -177,7 +169,7 @@ void play_time()
     char *min_file = "";
     if ((min_int >= 53 && min_int <= 59))
     {
-        min_file = min_arr[0];
+        min_file = minArr[0];
         flip2and3 = 1;
         if (hour_int == 11)
         {
@@ -190,16 +182,16 @@ void play_time()
     }
     else if (min_int >= 0 && min_int < 07)
     {
-        min_file = min_arr[0];
+        min_file = minArr[0];
         flip2and3 = 1;
     }
     else if (min_int >= 07 && min_int <= 22)
     {
-        min_file = min_arr[1];
+        min_file = minArr[1];
     }
     else if (min_int >= 23 && min_int <= 37)
     {
-        min_file = min_arr[2];
+        min_file = minArr[2];
         if (hour_int == 11)
         {
             hour_int = 0;
@@ -211,7 +203,7 @@ void play_time()
     }
     else if (min_int >= 38 && min_int <= 52)
     {
-        min_file = min_arr[3];
+        min_file = minArr[3];
         if (hour_int == 11)
         {
             hour_int = 0;
@@ -222,16 +214,18 @@ void play_time()
         }
     }
 
-    char *hour_file = hour_arr[hour_int];
+    char *hour_file = hourArr[hour_int];
 
     //Construct queue
 
     int wait1 = 1500;
     int wait2 = 1500;
     int wait3 = 1500;
+
+
     if (flip2and3)
     {
-        strcpy(playQueue[0], itis_loc);
+        strcpy(playQueue[0], itIsLoc);
         wait1 = 1500;
         strcpy(playQueue[1], hour_file);
         wait2 = 550;
@@ -240,7 +234,7 @@ void play_time()
     }
     else
     {
-        strcpy(playQueue[0], itis_loc);
+        strcpy(playQueue[0], itIsLoc);
         wait1 = 1500;
         strcpy(playQueue[1], min_file);
         wait2 = 1150;

@@ -7,7 +7,7 @@ static MenuItem menuItems[] = {
          &internetRadio},
         {"Bluetooth", "Bluetooth",
          &bluetooth},
-        {"Talking Clock", "Pratende Klok",
+        {"Clock", "Klok",
          &talkingClock},
         {"MP3 player", "MP3 speler",
          &mp3},

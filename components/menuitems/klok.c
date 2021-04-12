@@ -1,10 +1,20 @@
 
 #include "klok.h"
 
-static int size = 2;
+#include <stdio.h>
+#include <sys/time.h>
+#include "MenuItem.h"
+#include "home.h"
+#include "LCD/LCD.h"
+#include "esp_log.h"
+#include "time.h"
+
+static int size = 3;
 
 static MenuItem menuItems[] = {
-        {"Dutch Time", "Nederlandse Tijd",  &DutchTime},
+        {"Dutch Time", "Nederlandse Tijd",  &dutchTime},
+        {"NewZeland Time", "Nieuw-Zeeland Tijd",  &newZeland},
+        {"HongKong Time", "HongKong Tijd",  &hongKong},
         {"Return", "Terug", &returnFromTalkingClock}};
 
 
@@ -12,18 +22,22 @@ void launchTalkingClockMenu() {
     setMenu(menuItems, size, "| Time |", "| Klok |");
 }
 
-void DutchTime(){
-    ESP_LOGI("Starting a talking clock song now...", "");
+void dutchTime(){
+    ESP_LOGI("Starting Dutch time now", "");
     getZone("TZ", "CET-1CEST,M3.5.0,M10.5.0/3");
-    getTime();
-    play_time();
+    playTime();
 };
 
 void newZeland(){
-    ESP_LOGI("Starting a talking clock song now...", "");
+    ESP_LOGI("Starting New Zeland time now", "");
     getZone("TZ", "NZST-12NZDT-13,M10.1.0/02:00:00,M3.3.0/03:00:00");
-    getTime();
-    play_time();
+    playTime();
+};
+
+void hongKong(){
+    ESP_LOGI("Starting Hong Kong time now!", "");
+    getZone("TZ", "HKT-8");
+    playTime();
 };
 
 

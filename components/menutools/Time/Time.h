@@ -27,12 +27,12 @@
 #include "../menutools/LCD/LCD.h"
 #include "audioController.h"
 
-void time_init();
+void timeInit();
 void getTime();
 void setTime();
 void getZone(char *tz, char *Code );
-void initialize_sntp(void);
+void initializeSntp(void);
 void setLocalSummerTime();
 void setLocalWinterTime();
-void play_time();
+void playTime();
 #endif //SMARTSPEAKER_TIME_H
