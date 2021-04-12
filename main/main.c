@@ -10,16 +10,15 @@
 #include "LCD/LCD.h"
 #include "home.h"
 #include "RotaryEncoder_Adapter.h"
-#include "statusbar/statusbar.h"
-#include "wifiController.h"
+#include "../menutools/statusbar/statusbar.h"
 #include "AudioSetup/AudioSetup.h"
-#include "audioRecognition.h"
 
 #define SDA_GPIO 18
 #define SCL_GPIO 23
 #define I2C_ADDR 0x27
 static const char *TAG = "Main";
 static void nvsflash_init();
+static void wifi_init();
 static void sdcard_init();
 static esp_periph_set_handle_t peripherals_pool;
 
@@ -48,7 +47,7 @@ void app_main() {
 
     nvsflash_init();
     ESP_LOGI(TAG, "done nvsflash");
-    wifi_init(peripherals_pool);
+    wifi_init();
     ESP_LOGI(TAG, "done wifi init");
     sdcard_init();
     ESP_LOGI(TAG, "done SD init");
@@ -69,7 +68,6 @@ void app_main() {
 
     //START OF STATUS BAR TASK
     initializeStatusBar();
-    audioRecognition_init();
 }
 
 void sdcard_init(){
@@ -98,3 +96,20 @@ void nvsflash_init() {
     ESP_LOGI(TAG, "Done initiating NVS flash");
 }
 
+void wifi_init() {
+    // Initialize the network stack
+    ESP_ERROR_CHECK(esp_netif_init());
+
+    // Connect to the wifi using the variables set in the menuconfig
+    ESP_LOGI(TAG, "Connecting to WiFi...");
+
+    periph_wifi_cfg_t wifi_cfg = {
+            .ssid = "iPhone",
+            .password = "jurre1234",
+    };
+    esp_periph_handle_t wifi_handle = periph_wifi_init(&wifi_cfg);
+    esp_periph_start(peripherals_pool, wifi_handle);
+    // We wait until the wifi is connected so we dont try to read data that isnt available yet.
+    periph_wifi_wait_for_connected(wifi_handle, portMAX_DELAY);
+    ESP_LOGI(TAG, "Wifi Connected");
+}

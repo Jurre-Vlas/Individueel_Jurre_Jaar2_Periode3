@@ -1,14 +1,14 @@
 #include "home.h"
 
-static int size = 8;
+static int size = 7;
 
 static MenuItem menuItems[] = {
         {"Radio", "Radio",
          &internetRadio},
         {"Bluetooth", "Bluetooth",
          &bluetooth},
-        {"Talking Clock", "Pratende Klok",
-         &talkingClock},
+        {"Karaoke", "Meezingen",
+         &karaoke},
         {"MP3 player", "MP3 speler",
          &mp3},
         {"Whitenoise", "Rustgeluid",
@@ -16,9 +16,7 @@ static MenuItem menuItems[] = {
         {"Reminders", "Herinneringen",
          &reminders},
         {"Settings", "Instellingen",
-         &settings},
-        {"Weather", "weer",
-                &weather}};
+         &settings}};
 
 /**
  * Launches the Home menutools.
@@ -45,11 +43,11 @@ void bluetooth(void *args) {
 }
 
 /**
- * Responds to the selection of the 'Talking Clock' item".
+ * Responds to the selection of the 'Karaoke' item".
  */
-void talkingClock(void *args) {
-    ESP_LOGI("METHOD CALLED", "WE CALLED METHOD Talking clock \n");
-    launchTalkingClockMenu();
+void karaoke(void *args) {
+    ESP_LOGI("METHOD CALLED", "WE CALLED METHOD karaoke \n");
+    launchKaraokeMenu();
 }
 
 /**
@@ -79,12 +77,6 @@ void reminders(void *args) {
 void settings(void *args) {
     ESP_LOGI("METHOD CALLED", "WE CALLED METHOD settings \n");
     launchSettingsMenu();
-}
-
-void weather(void *args) {
-    ESP_LOGI("METHOD CALLED", "WE CALLED METHOD weather \n");
-
-    launchWeatherMenu();
 }
 
 /**

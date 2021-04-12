@@ -12,14 +12,13 @@
 
 #include "internetradio.h"
 #include "bluetooth.h"
-#include "klok.h"
+#include "karaoke.h"
 #include "mp3.h"
 #include "whitenoise.h"
 #include "reminders.h"
 #include "MenuItem.h"
 #include "LCD/LCD.h"
 #include "settings.h"
-#include "weather.h"
 
 #include "esp_log.h"
 
@@ -29,13 +28,12 @@
 void launchHomeMenu();
 void internetRadio();
 void bluetooth();
-void talkingClock();
+void karaoke();
 void mp3();
 void whiteNoise();
 void reminders();
 void suspendHome();
 void settings();
-void weather();
 void terminateHome();
 
 

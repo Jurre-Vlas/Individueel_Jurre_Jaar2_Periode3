@@ -8,26 +8,10 @@
 //All includes can be found in the header file.
 #include "LCD.h"
 
-#include <stdio.h>
-#include <string.h>
-#include "hd44780.h"
-#include "pcf8574.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "esp_log.h"
-#include "statusbar/statusbar.h"
-#include "MenuItem.h"
-#include <stddef.h>
-#include "LCD.h"
-#include "../statusbar/statusbar_icons.c"
-
 //Defining pins and adresses
 #define SDA_GPIO 18
 #define SCL_GPIO 23
 #define I2C_ADDR 0x27
-#define xQueue_Size 10
-#define size_Item sizeof(struct LcdQueueItem)
-
 static i2c_dev_t pcf8574;
 
 //Current selected item in the menu
@@ -45,8 +29,6 @@ int currentLanguage = 0;
 
 //Handle for the semaphore
 SemaphoreHandle_t xSemaphore = NULL;
-
-QueueHandle_t xQueue;
 
 // Adapter between our code and the expander.
 static esp_err_t write_lcd_data(const hd44780_t *lcd, uint8_t data) {
@@ -69,28 +51,13 @@ static hd44780_t lcd = {
         }
 };
 
-void writer_Task(void *pvPar) {
-    while (1) {
-        if (uxQueueMessagesWaiting(xQueue) > 0) {
-            struct LcdQueueItem buffer;
-            if (xQueueReceive(xQueue, &buffer, 0) == pdPASS) {
-                //                ESP_LOGI("QUEUE", "recieved data: %d \n", buffer);
-                //printf("Writing line %d: %s\n", buffer.line, buffer.text);
-                hd44780_gotoxy(&lcd, buffer.pos, buffer.line);
-                hd44780_puts(&lcd, buffer.text);
-            }
-        }
-        vTaskDelay(pdMS_TO_TICKS(10));
-    }
-}
 //Initialize LCD screen.
 void initLCD() {
     memset(&pcf8574, 0, sizeof(i2c_dev_t));
     ESP_ERROR_CHECK(pcf8574_init_desc(&pcf8574, 0, I2C_ADDR, SDA_GPIO, SCL_GPIO));
     ESP_ERROR_CHECK(hd44780_init(&lcd));
     hd44780_switch_backlight(&lcd, true);
-    xTaskCreate(&writer_Task, "LCD Writer Task", 2048, NULL, 5, NULL);
-    xQueue = xQueueCreate(xQueue_Size, size_Item);
+    xSemaphore = xSemaphoreCreateMutex();
     ESP_LOGI("LCD DRIVER", "Done with init/creating mutex");
 }
 
@@ -107,33 +74,75 @@ void setLangToNL() {
 
 //WritetoLine method, give some text and the line where it should be written.
 void writeToLine(char *text, int lineNumber) {
-    struct LcdQueueItem data = {
-            .line = lineNumber,
-            .pos = 0,
-            .text = text
-    };
-    xQueueSend(xQueue, &data, 20);
+    if (xSemaphore != NULL) {
+        /* See if we can obtain the semaphore.  If the semaphore is not
+        available wait 10 ticks to see if it becomes free. */
+        if (xSemaphoreTake(xSemaphore, (TickType_t) 10) == pdTRUE) {
+            /* We were able to obtain the semaphore and can now access the
+            shared resource. */
+
+            //If we obtain the semaphore (so no one else is accessing this)
+            // We can write to the screen.
+            hd44780_gotoxy(&lcd, 0, lineNumber);
+            hd44780_puts(&lcd, text);
+
+            /* We have finished accessing the shared resource.  Release the
+            semaphore. */
+            xSemaphoreGive(xSemaphore);
+        } else {
+            /* We could not obtain the semaphore and can therefore not access
+            the shared resource safely. */
+            ESP_LOGI("LCD DRIVER", "WE FAILED IN WRITING TO LINE WITH THE MUTEX");
+        }
+    }
+
 }
 
 //writeToLineAndCol method, give some text and the line where it should be written.
 // Also give the column, which is where in the line we should start.
 void writeToLineAndCol(char *text, int lineNumber, int column) {
-    struct LcdQueueItem data = {
-            .line = lineNumber,
-            .pos = column,
-            .text = text
-    };
-    xQueueSend(xQueue, &data, 20);
+    if (xSemaphore != NULL) {
+        /* See if we can obtain the semaphore.  If the semaphore is not
+        available wait 10 ticks to see if it becomes free. */
+        if (xSemaphoreTake(xSemaphore, (TickType_t) 10) == pdTRUE) {
+            /* We were able to obtain the semaphore and can now access the
+            shared resource. */
+
+            //If we obtain the semaphore (so no one else is accessing this)
+            // We can write to the screen.
+            hd44780_gotoxy(&lcd, column, lineNumber);
+            hd44780_puts(&lcd, text);
+
+            /* We have finished accessing the shared resource.  Release the
+            semaphore. */
+            xSemaphoreGive(xSemaphore);
+        } else {
+            /* We could not obtain the semaphore and can therefore not access
+            the shared resource safely. */
+            ESP_LOGI("LCD DRIVER", "WE FAILED IN WRITING TO LINE WITH THE MUTEX");
+        }
+    }
+
 }
 
 //Clears a given line.
 void clearLine(int lineNumber) {
-    struct LcdQueueItem data = {
-            .line = lineNumber,
-            .pos = 0,
-            .text = "                    "
-    };
-    xQueueSend(xQueue, &data, 20);
+    if (xSemaphoreTake(xSemaphore, (TickType_t) 10) == pdTRUE) {
+        /* We were able to obtain the semaphore and can now access the
+        shared resource. */
+
+        hd44780_gotoxy(&lcd, 0, lineNumber);
+        hd44780_puts(&lcd, "                    ");
+
+        /* We have finished accessing the shared resource.  Release the
+        semaphore. */
+        xSemaphoreGive(xSemaphore);
+    } else {
+        /* We could not obtain the semaphore and can therefore not access
+        the shared resource safely. */
+        ESP_LOGI("LCD DRIVER", "WE FAILED IN WRITING TO LINE WITH THE MUTEX");
+    }
+
 }
 
 //Used for uploading special characters and making them writeable.
@@ -180,7 +189,9 @@ void setMenu(MenuItem menuItems[], int size, char descrLineEN[],  char descrLine
 }
 
 void scrollRight() {
-    if (currentItem < itemListSize - 1) {
+    if (currentItem >= itemListSize - 1) {
+        //do nothing
+    } else {
         currentItem = currentItem + 1;
         itemListPtr++;
         clearLine(2);
@@ -202,7 +213,9 @@ void scrollRight() {
 }
 
 void scrollLeft() {
-    if (currentItem != 0) {
+    if (currentItem == 0) {
+        //do nothing
+    } else {
         currentItem = currentItem - 1;
         itemListPtr--;
         clearLine(2);

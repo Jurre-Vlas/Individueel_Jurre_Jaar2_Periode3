@@ -2,8 +2,8 @@
 // Created by Davy on 15-3-2021.
 //
 
-#ifndef SMARTSPEAKER_MP3_H
-#define SMARTSPEAKER_MP3_H
+#ifndef SMARTSPEAKER_KARAOKE_H
+#define SMARTSPEAKER_KARAOKE_H
 
 #include <stdio.h>
 #include <freertos/FreeRTOS.h>
@@ -15,12 +15,10 @@
 #include "LCD/LCD.h"
 #include "esp_log.h"
 
-void launchMP3Menu();
+void launchKaraokeMenu();
 
-void Play();
+void StartKaraoke();
 
-void Stop();
+void returnFromKaraoke();
 
-void returnFromMp3();
-
-#endif //SMARTSPEAKER_MP3_H
+#endif //SMARTSPEAKER_KARAOKE_H

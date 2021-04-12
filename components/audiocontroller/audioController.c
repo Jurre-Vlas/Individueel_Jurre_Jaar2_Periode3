@@ -18,21 +18,9 @@ static inputSource inputSources[] = {
     {"WhiteNoise",
      &whitenoise_init,
      &whitenoise_settarget,
-     &whitenoise_destroy},
-    {"Raw",
-     &rawStream_init,
-     &rawStream_settarget,
-     &rawStream_destroy},
-    {"MP3",
-     &mp3_init,
-     &mp3_settarget,
-     &mp3_destroy},
-     {"Time",
-     &timesource_init,
-     &timesource_settarget,
-     &timesource_destroy}};
+     &whitenoise_destroy}};
 
-void audiocontroller_init(esp_periph_set_handle_t * setPtr)
+void audiocontroller_init(esp_periph_set_handle_t *setPtr)
 {
     peripherals_poolPtr = setPtr;
 
@@ -58,10 +46,10 @@ void audiocontroller_destroy()
     pipelineHasItems = 0;
 }
 
-void audiocontroller_setTarget(void* callback)
+void audiocontroller_setTarget(char *location)
 {
     ESP_LOGI(TAG, "Set target on input source");
-    (*inputSources[sourceIndex].settarget)(&pipeline, callback);
+    (*inputSources[sourceIndex].settarget)(&pipeline, location);
 }
 
 void audiocontroller_setSource(unsigned int id)
@@ -70,11 +58,6 @@ void audiocontroller_setSource(unsigned int id)
     if (pipelineHasItems)
         (*inputSources[sourceIndex].destroy)(&pipeline);
     sourceIndex = id;
-    if (inputSources[sourceIndex].init == NULL){
-    sourceIndex = 0;
-    }
-    else
-    ESP_LOGI(TAG, "starting new pipeline");
     (*inputSources[sourceIndex].init)(&pipeline);
     pipelineHasItems = 1;
 }

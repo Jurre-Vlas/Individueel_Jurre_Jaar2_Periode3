@@ -167,4 +167,3 @@ CMakeUserPresets.json
 
 # IDF build folder
 build/
-sdkconfig

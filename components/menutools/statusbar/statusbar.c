@@ -5,15 +5,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include "statusbar_icons.c"
-#include "../LCD/LCD.h"
-#include "../Time/Time.h"
-#include "../../wifiController/wifiController.h"
+#include "../menutools/LCD/LCD.h"
+#include "../menutools/Time/Time.h"
 
-
-#define STATUSBAR_UPDATEDELAY_MS 100
+#define STATUSBAR_UPDATEDELAY_MS 3000
 #define STATUSBAR_WAIT_COUNT 3
 
 static const char *TAG = "Statusbar";
+static int i = 0;
 
 void statusbar_init() {
     //Upload characters to LCD
@@ -22,14 +21,8 @@ void statusbar_init() {
     lcdUploadChar(PLAY_ICON, 2);     // \x0A
     lcdUploadChar(OK_ICON, 3);      // \x0B
     lcdUploadChar(PAUSE_ICON, 4);    // \x0C
-    writeToLine("\x0A              \x08\x0B \x09\x0B", 0);
 }
 
-//TODO update bluetooth
-bool bluetooth_stat = false;
-bool wifi_stat = false;
-bool bluetooth_buff = false;
-bool wifi_buff= false;
 
 // bluetooth icon OK_icon wireless OK-icon
 void wait() {
@@ -37,30 +30,40 @@ void wait() {
 };
 
 void statusbar_update() {
-    if (bluetooth_stat != bluetooth_buff) {
-        writeToLineAndCol(bluetooth_stat ? "\x0B" : "x", 0, 16);
-        bluetooth_buff = bluetooth_stat;
-    }
-    if (wifi_stat != wifi_buff) {
-        writeToLineAndCol(wifi_stat ? "\x0B" : "x", 0, 19);
-        wifi_buff = wifi_stat;
-    }
-    getTime(0);
+    //TODO: MAAK WI-FI EN BT UP-TO-DATE EN VOEG DE TIJD TOE
+//    clearLine(0);
+//    getTime(0);
+//    wait();
+//    writeToLineAndCol("\x08", 0, 10);
+//    wait();
+//    writeToLineAndCol("\x09", 0, 12);
+//    wait();
+//    writeToLineAndCol("\x0A", 0, 14);
+//    wait();
+//    writeToLineAndCol("\x0C", 0, 18);
+//    wait();
+//    vTaskDelay(3000 / portTICK_PERIOD_MS);
+
+    clearLine(0);
+    getTime();
+    wait();
+    writeToLineAndCol("\x08", 0, 14);
+    wait();
+    writeToLineAndCol("\x0B", 0, 15);
+    wait();
+    writeToLineAndCol("\x09", 0, 17);
+    wait();
+    writeToLineAndCol("\x0B", 0, 18);
+    wait();
+    vTaskDelay(470 / portTICK_PERIOD_MS);
+
 }
 
-void statusbar_update_task(void *pvParameters) {
-    writeToLine("Mon 00:00:00   \x08\x0B \x09\x0B", 0);
-
-    writeToLineAndCol(bluetooth_stat ? "\x0B" : "x", 0, 16);
-    writeToLineAndCol(wifi_stat ? "\x0B" : "x", 0, 19);
-
-    bluetooth_buff = bluetooth_stat;
-    wifi_buff = wifi_stat;
+void statusbar_update_task() {
     time_init();
     while (1) {
-//        ESP_LOGD(TAG, "Updating statusbar");
-        wifi_stat = getWifiStatus();
+        ESP_LOGD(TAG, "Updating statusbar");
         statusbar_update();
-        vTaskDelay(STATUSBAR_UPDATEDELAY_MS / portTICK_PERIOD_MS);
+        vTaskDelay(470 / portTICK_PERIOD_MS);
     }
 }

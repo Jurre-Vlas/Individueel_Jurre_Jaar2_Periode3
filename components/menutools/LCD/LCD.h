@@ -12,14 +12,6 @@
 #include <stddef.h>
 #include "MenuItem.h"
 
-struct LcdQueueItem
-{
-    uint8_t line;
-    uint8_t pos;
-    char *text;
-
-};
-
 void writeToLine(char *text, int lineNumber);
 void writeToLineAndCol(char *text, int lineNumber, int column);
 void initLCD();

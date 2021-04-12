@@ -25,12 +25,9 @@
 #include "esp_netif.h"
 #include "Sources/httpStream.h"
 #include "Sources/whitenoise.h"
-#include "Sources/mp3.h"
-#include "Sources/rawStream.h"
-#include "Sources/timesource.h"
 
 void audiocontroller_init(esp_periph_set_handle_t *setPtr);
-void audiocontroller_setTarget(void* callback);
+void audiocontroller_setTarget(char *location);
 void audiocontroller_setSource(unsigned int id);
 void audiocontroller_destroy();
 
@@ -38,8 +35,9 @@ typedef struct
 {
     char shortName[10];
     void (*init)(audio_pipeline_handle_t *pipeline);
-    void (*settarget)(audio_pipeline_handle_t *pipeline, char* target);
+    void (*settarget)(audio_pipeline_handle_t *pipeline, char *target);
     void (*destroy)(audio_pipeline_handle_t *pipeline);
 } inputSource;
+
 
 #endif

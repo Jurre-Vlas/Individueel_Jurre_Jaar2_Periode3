@@ -24,7 +24,6 @@ void PlayWN(){
 
 void StopWN(){
     ESP_LOGI("STOPPING WHITE NOISE", "");
-    audiocontroller_destroy();
 };
 
 void returnFromWN(){

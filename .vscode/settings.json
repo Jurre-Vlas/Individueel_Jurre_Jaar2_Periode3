@@ -1,7 +1,5 @@
 {
     "files.associations": {
-        "audiosetup.h": "c",
-        "audiocontroller.h": "c",
-        "mp3.h": "c"
+        "audiosetup.h": "c"
     }
 }
