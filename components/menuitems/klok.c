@@ -15,6 +15,7 @@ static MenuItem menuItems[] = {
         {"Dutch Time", "Nederlandse Tijd",  &dutchTime},
         {"NewZeland Time", "Nieuw-Zeeland Tijd",  &newZeland},
         {"HongKong Time", "HongKong Tijd",  &hongKong},
+        {"Speak Time", "Spreek tijd",  &startTalkingClock},
         {"Return", "Terug", &returnFromTalkingClock}};
 
 
@@ -38,6 +39,12 @@ void hongKong(){
     ESP_LOGI("Starting Hong Kong time now!", "");
     getZone("TZ", "HKT-8");
     playTime();
+};
+
+
+void startTalkingClock(){
+    ESP_LOGI("Starting a talking clock song now...", "");
+    play_time();
 };
 
 

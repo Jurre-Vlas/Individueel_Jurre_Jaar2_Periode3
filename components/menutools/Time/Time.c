@@ -232,9 +232,9 @@ void playTime()
         strcpy(playQueue[2], min_file);
         wait3 = 1150;
     }
-    else
-    {
-        strcpy(playQueue[0], itIsLoc);
+        else
+        {
+            strcpy(playQueue[0], itIsLoc);
         wait1 = 1500;
         strcpy(playQueue[1], min_file);
         wait2 = 1150;
