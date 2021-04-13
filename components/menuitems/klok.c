@@ -9,7 +9,9 @@
 #include "esp_log.h"
 #include "time.h"
 
-static int size = 3;
+// size of MenuItem
+static int size = 5;
+
 
 static MenuItem menuItems[] = {
         {"Dutch Time", "Nederlandse Tijd",  &dutchTime},
@@ -18,21 +20,21 @@ static MenuItem menuItems[] = {
         {"Speak Time", "Spreek tijd",  &startTalkingClock},
         {"Return", "Terug", &returnFromTalkingClock}};
 
-
-void launchTalkingClockMenu() {
+//launching Clock Menu
+void launchClockMenu() {
     setMenu(menuItems, size, "| Time |", "| Klok |");
 }
 
 void dutchTime(){
     ESP_LOGI("Starting Dutch time now", "");
     getZone("TZ", "CET-1CEST,M3.5.0,M10.5.0/3");
-    playTime();
+  //  playTime();
 };
 
 void newZeland(){
     ESP_LOGI("Starting New Zeland time now", "");
     getZone("TZ", "NZST-12NZDT-13,M10.1.0/02:00:00,M3.3.0/03:00:00");
-    playTime();
+  //  playTime();
 };
 
 void hongKong(){
@@ -44,7 +46,7 @@ void hongKong(){
 
 void startTalkingClock(){
     ESP_LOGI("Starting a talking clock song now...", "");
-    play_time();
+    playTime();
 };
 
 

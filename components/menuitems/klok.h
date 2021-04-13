@@ -3,7 +3,7 @@
 #define SMARTSPEAKER_KLOK_H
 
 
-void launchTalkingClockMenu();
+void launchClockMenu();
 
 void dutchTime();
 void newZeland();

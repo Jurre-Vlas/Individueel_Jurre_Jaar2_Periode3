@@ -19,7 +19,8 @@ char *min;
 char *TimeZone;
 char *Location;
 
-int SorWTime = 0;
+
+int setNewTime = 0;
 
 void timeInit()
 {
@@ -32,7 +33,6 @@ void timeInit()
         printf("Waiting for system time to be set... (%d/%d) \n", retry, retry_count);
         vTaskDelay(2000 / portTICK_PERIOD_MS);
     }
-
     getZone("TZ", "CET-1CEST,M3.5.0,M10.5.0/3" );
     getTime();
 }
@@ -91,34 +91,43 @@ char *dest2_buff = "";
 char hourPlayed[4] = "";
 int firstRun = 1;
 
+void setOtherTime(){
+    setNewTime = 1;
+    vTaskDelay(100 / portTICK_PERIOD_MS);
+}
+
 void getZone(char *tz, char *Code ){
     TimeZone = tz;
     Location = Code;
+    setNewTime = 0;
+
 }
+
 
 void getTime()
 {
+    if (!setNewTime) {
         time(&now);
         setenv(TimeZone, Location, 1);
         tzset();
+
         localtime_r(&now, &timeinfo);
         strftime(strftime_buf, sizeof(strftime_buf), "%c", &timeinfo);
+
 
         vTaskDelay(30 / portTICK_PERIOD_MS);
         char *dest = substr(strftime_buf, 11, 20);
         vTaskDelay(30 / portTICK_PERIOD_MS);
         char *dest2 = substr(strftime_buf, 0, 4);
 
-        if (strcmp(dest2, dest2_buff) != 0)
-        {
+        if (strcmp(dest2, dest2_buff) != 0) {
             writeToLineAndCol(dest2, 0, 0);
             dest2_buff = dest2;
         }
 
         vTaskDelay(30 / portTICK_PERIOD_MS);
 
-        if (strcmp(dest, dest_buff) != 0)
-        {
+        if (strcmp(dest, dest_buff) != 0) {
             writeToLineAndCol(dest, 0, 4);
             dest_buff = dest;
         }
@@ -127,19 +136,6 @@ void getTime()
         min = substr(strftime_buf, 14, 16);
 
         printf("min");
-
-
-    if (strcmp(hourPlayed, hour))
-    {
-        strcpy(hourPlayed, hour);
-        if (firstRun)
-        {
-            firstRun = 0;
-        }
-        else
-        {
-            playTime();
-        }
     }
 }
 
@@ -221,7 +217,6 @@ void playTime()
     int wait1 = 1500;
     int wait2 = 1500;
     int wait3 = 1500;
-
 
     if (flip2and3)
     {

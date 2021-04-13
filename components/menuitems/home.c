@@ -47,7 +47,7 @@ void bluetooth(void *args) {
  */
 void talkingClock(void *args) {
     ESP_LOGI("METHOD CALLED", "WE CALLED METHOD Talking clock \n");
-    launchTalkingClockMenu();
+    launchClockMenu();
 }
 
 /**

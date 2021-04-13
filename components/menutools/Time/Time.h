@@ -33,6 +33,7 @@ void setTime();
 void getZone(char *tz, char *Code );
 void initializeSntp(void);
 void setLocalSummerTime();
+void setOtherTime();
 void setLocalWinterTime();
 void playTime();
 #endif //SMARTSPEAKER_TIME_H
