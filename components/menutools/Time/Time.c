@@ -235,6 +235,8 @@ void playTime() {
     int wait2 = 1500;
     int wait3 = 1500;
 
+
+    //from here i got some help from teammates to understand how the audiocontroller they made works.
     if (flip2and3)
     {
         strcpy(playQueue[0], itIsLoc);
