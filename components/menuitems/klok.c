@@ -25,31 +25,34 @@ void launchClockMenu() {
     setMenu(menuItems, size, "| Time |", "| Klok |");
 }
 
+//set & play Dutch time
 void dutchTime(){
     ESP_LOGI("Starting Dutch time now", "");
     getZone("TZ", "CET-1CEST,M3.5.0,M10.5.0/3");
-  //  playTime();
+    playTime();
 };
 
+//set & play New Zeland time
 void newZeland(){
     ESP_LOGI("Starting New Zeland time now", "");
     getZone("TZ", "NZST-12NZDT-13,M10.1.0/02:00:00,M3.3.0/03:00:00");
-  //  playTime();
+    playTime();
 };
 
+//set & play Hong Kong time
 void hongKong(){
     ESP_LOGI("Starting Hong Kong time now!", "");
     getZone("TZ", "HKT-8");
     playTime();
 };
 
-
+//play the time
 void startTalkingClock(){
     ESP_LOGI("Starting a talking clock song now...", "");
     playTime();
 };
 
-
+//return to Menu
 void returnFromTalkingClock(){
     ESP_LOGI("RETURN", "");
     launchHomeMenu();

@@ -1,6 +1,3 @@
-//
-// Created by Davy on 17-3-2021.
-//
 #include "time.h"
 
 #define SDA_GPIO 18
@@ -11,7 +8,7 @@
 static const char *TAG = "Time";
 
 struct tm timeinfo = {0};
-char strftime_buf[64];
+char strfTimeBuf[64];
 time_t now = 0;
 char *hour;
 char *min;
@@ -27,10 +24,10 @@ void timeInit()
     initializeSntp();
     // wait for time to be set
     int retry = 0;
-    int retry_count = 10;
-    while (sntp_get_sync_status() == SNTP_SYNC_STATUS_RESET && ++retry < retry_count)
+    int retryCount = 10;
+    while (sntp_get_sync_status() == SNTP_SYNC_STATUS_RESET && ++retry < retryCount)
     {
-        printf("Waiting for system time to be set... (%d/%d) \n", retry, retry_count);
+        printf("Waiting for system time to be set... (%d/%d) \n", retry, retryCount);
         vTaskDelay(2000 / portTICK_PERIOD_MS);
     }
     getZone("TZ", "CET-1CEST,M3.5.0,M10.5.0/3" );
@@ -86,8 +83,8 @@ char *substr(const char *src, int m, int n)
     return dest - len;
 }
 
-char *dest_buff = "";
-char *dest2_buff = "";
+char *destBuff = "";
+char *dest2Buff = "";
 char hourPlayed[4] = "";
 int firstRun = 1;
 
@@ -110,28 +107,28 @@ void getTime()
         tzset();
 
         localtime_r(&now, &timeinfo);
-        strftime(strftime_buf, sizeof(strftime_buf), "%c", &timeinfo);
+        strftime(strfTimeBuf, sizeof(strfTimeBuf), "%c", &timeinfo);
 
 
         vTaskDelay(30 / portTICK_PERIOD_MS);
-        char *dest = substr(strftime_buf, 11, 20);
+        char *dest = substr(strfTimeBuf, 11, 20);
         vTaskDelay(30 / portTICK_PERIOD_MS);
-        char *dest2 = substr(strftime_buf, 0, 4);
+        char *dest2 = substr(strfTimeBuf, 0, 4);
 
-        if (strcmp(dest2, dest2_buff) != 0) {
+        if (strcmp(dest2, dest2Buff) != 0) {
             writeToLineAndCol(dest2, 0, 0);
-            dest2_buff = dest2;
+            dest2Buff = dest2;
         }
 
         vTaskDelay(30 / portTICK_PERIOD_MS);
 
-        if (strcmp(dest, dest_buff) != 0) {
+        if (strcmp(dest, destBuff) != 0) {
             writeToLineAndCol(dest, 0, 4);
-            dest_buff = dest;
+            destBuff = dest;
         }
-        hour = substr(strftime_buf, 11, 13);
+        hour = substr(strfTimeBuf, 11, 13);
 
-        min = substr(strftime_buf, 14, 16);
+        min = substr(strfTimeBuf, 14, 16);
 
         printf("min");
     }
@@ -147,68 +144,68 @@ void initializeSntp(void)
 
 void playTime()
 {
-    int hour_int = atoi(hour);
-    int min_int = atoi(min);
+    int hourInt = atoi(hour);
+    int minInt = atoi(min);
     int flip2and3 = 0;
     char playQueue[3][40] = {
         "",
         "",
         ""};
 
-    if (hour_int >= 12)
+    if (hourInt >= 12)
     {
-        hour_int -= 12;
+        hourInt -= 12;
     }
 
-    char *min_file = "";
-    if ((min_int >= 53 && min_int <= 59))
+    char *minFile = "";
+    if ((minInt >= 53 && minInt <= 59))
     {
-        min_file = minArr[0];
+        minFile = minArr[0];
         flip2and3 = 1;
-        if (hour_int == 11)
+        if (hourInt == 11)
         {
-            hour_int = 0;
+            hourInt = 0;
         }
         else
         {
-            hour_int += 1;
+            hourInt += 1;
         }
     }
-    else if (min_int >= 0 && min_int < 07)
+    else if (minInt >= 0 && minInt < 07)
     {
-        min_file = minArr[0];
+        minFile = minArr[0];
         flip2and3 = 1;
     }
-    else if (min_int >= 07 && min_int <= 22)
+    else if (minInt >= 07 && minInt <= 22)
     {
-        min_file = minArr[1];
+        minFile = minArr[1];
     }
-    else if (min_int >= 23 && min_int <= 37)
+    else if (minInt >= 23 && minInt <= 37)
     {
-        min_file = minArr[2];
-        if (hour_int == 11)
+        minFile = minArr[2];
+        if (hourInt == 11)
         {
-            hour_int = 0;
+            hourInt = 0;
         }
         else
         {
-            hour_int += 1;
+            hourInt += 1;
         }
     }
-    else if (min_int >= 38 && min_int <= 52)
+    else if (minInt >= 38 && minInt <= 52)
     {
-        min_file = minArr[3];
-        if (hour_int == 11)
+        minFile = minArr[3];
+        if (hourInt == 11)
         {
-            hour_int = 0;
+            hourInt = 0;
         }
         else
         {
-            hour_int += 1;
+            hourInt += 1;
         }
     }
 
-    char *hour_file = hourArr[hour_int];
+    char *hourFile = hourArr[hourInt];
 
     //Construct queue
 
@@ -220,18 +217,18 @@ void playTime()
     {
         strcpy(playQueue[0], itIsLoc);
         wait1 = 1500;
-        strcpy(playQueue[1], hour_file);
+        strcpy(playQueue[1], hourFile);
         wait2 = 550;
-        strcpy(playQueue[2], min_file);
+        strcpy(playQueue[2], minFile);
         wait3 = 1150;
     }
         else
         {
             strcpy(playQueue[0], itIsLoc);
         wait1 = 1500;
-        strcpy(playQueue[1], min_file);
+        strcpy(playQueue[1], minFile);
         wait2 = 1150;
-        strcpy(playQueue[2], hour_file);
+        strcpy(playQueue[2], hourFile);
         wait3 = 550;
     }
 
