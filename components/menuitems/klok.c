@@ -10,13 +10,14 @@
 #include "time.h"
 
 // size of MenuItem
-static int size = 5;
+static int size = 6;
 
 
 static MenuItem menuItems[] = {
         {"Dutch Time",     "Nederlandse Tijd",   &dutchTime},
         {"NewZeland Time", "Nieuw-Zeeland Tijd", &newZeland},
         {"HongKong Time",  "HongKong Tijd",      &hongKong},
+        {"USA Time",     "Amerika tijd",        &unitedStates},
         {"Speak Time",     "Spreek tijd",        &startTalkingClock},
         {"Return",         "Terug",              &returnFromTalkingClock}
 };
@@ -51,14 +52,20 @@ void hongKong()
     playTime();
 };
 
+//set & play USA time
+void unitedStates()
+{
+    ESP_LOGI("Starting USA time now!", "");
+    getZone("TZ", "HAW10");
+    playTime();
+};
+
 //play the time
 void startTalkingClock()
 {
     ESP_LOGI("Starting a talking clock song now...", "");
     playTime();
 };
-
-
 
 //return to Menu
 void returnFromTalkingClock()

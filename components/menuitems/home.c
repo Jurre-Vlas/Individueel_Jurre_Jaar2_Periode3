@@ -8,7 +8,7 @@ static MenuItem menuItems[] = {
         {"Bluetooth", "Bluetooth",
          &bluetooth},
         {"Clock", "Klok",
-         &talkingClock},
+         &clock},
         {"MP3 player", "MP3 speler",
          &mp3},
         {"Whitenoise", "Rustgeluid",
@@ -45,7 +45,7 @@ void bluetooth(void *args) {
 /**
  * Responds to the selection of the 'Talking Clock' item".
  */
-void talkingClock(void *args) {
+void clock(void *args) {
     ESP_LOGI("METHOD CALLED", "WE CALLED METHOD Talking clock \n");
     launchClockMenu();
 }

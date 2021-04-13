@@ -24,11 +24,10 @@
 
 //includes for all the menutools's
 
-
 void launchHomeMenu();
 void internetRadio();
 void bluetooth();
-void talkingClock();
+void clock();
 void mp3();
 void whiteNoise();
 void reminders();

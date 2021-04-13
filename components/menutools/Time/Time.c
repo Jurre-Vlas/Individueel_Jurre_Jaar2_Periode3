@@ -92,20 +92,20 @@ char *substr(const char *src, int m, int n)
     char *dest = (char *) malloc(sizeof(char) * (len + 1));
 
     // extracts characters between m'th and n'th index from source string
-    // and copy them into the destination string
+    // and copy them into the destination string.
     for (int i = m; i < n && (*(src + i) != '\0'); i++) {
         *dest = *(src + i);
         dest++;
     }
 
-    // null-terminate the destination string
+    // null-terminate the destination string.
     *dest = '\0';
 
-    // return the destination string
+    // return the destination string.
     return dest - len;
 }
 
-    //set new Zone, vTaksDelay otherwise error
+    //set new Zone.
 void getZone(char *tz, char *Code)
 {
     setNewTime = 1;
@@ -160,7 +160,7 @@ void getTime()
 
     }
 }
-
+//initializing SNTP with server.
 void initializeSntp(void)
 {
     ESP_LOGI(TAG, "Initializing SNTP");
@@ -169,6 +169,7 @@ void initializeSntp(void)
     sntp_init();
 }
 
+// playtime method, give the time to play. last lines I wrote with my team because I used there audicontroller.
 void playTime() {
     int hourInt = atoi(hour);
     int minInt = atoi(min);
@@ -179,10 +180,13 @@ void playTime() {
             ""
     };
 
+    //If time > 12 that it needs to -12 because you say 24:00 and 12:00 the same way.
     if (hourInt >= 12)
     {
         hourInt -= 12;
     }
+
+    //check what time we need to say.
 
     char *minFile = "";
     if ((minInt >= 53 && minInt <= 59))
