@@ -6,8 +6,11 @@
 void launchClockMenu();
 
 void dutchTime();
+
 void newZeland();
+
 void hongKong();
+
 void startTalkingClock();
 
 void returnFromTalkingClock();

@@ -14,46 +14,55 @@ static int size = 5;
 
 
 static MenuItem menuItems[] = {
-        {"Dutch Time", "Nederlandse Tijd",  &dutchTime},
-        {"NewZeland Time", "Nieuw-Zeeland Tijd",  &newZeland},
-        {"HongKong Time", "HongKong Tijd",  &hongKong},
-        {"Speak Time", "Spreek tijd",  &startTalkingClock},
-        {"Return", "Terug", &returnFromTalkingClock}};
+        {"Dutch Time",     "Nederlandse Tijd",   &dutchTime},
+        {"NewZeland Time", "Nieuw-Zeeland Tijd", &newZeland},
+        {"HongKong Time",  "HongKong Tijd",      &hongKong},
+        {"Speak Time",     "Spreek tijd",        &startTalkingClock},
+        {"Return",         "Terug",              &returnFromTalkingClock}
+};
 
 //launching Clock Menu
-void launchClockMenu() {
+void launchClockMenu()
+{
     setMenu(menuItems, size, "| Time |", "| Klok |");
 }
 
 //set & play Dutch time
-void dutchTime(){
+void dutchTime()
+{
     ESP_LOGI("Starting Dutch time now", "");
     getZone("TZ", "CET-1CEST,M3.5.0,M10.5.0/3");
     playTime();
 };
 
 //set & play New Zeland time
-void newZeland(){
+void newZeland()
+{
     ESP_LOGI("Starting New Zeland time now", "");
     getZone("TZ", "NZST-12NZDT-13,M10.1.0/02:00:00,M3.3.0/03:00:00");
     playTime();
 };
 
 //set & play Hong Kong time
-void hongKong(){
+void hongKong()
+{
     ESP_LOGI("Starting Hong Kong time now!", "");
     getZone("TZ", "HKT-8");
     playTime();
 };
 
 //play the time
-void startTalkingClock(){
+void startTalkingClock()
+{
     ESP_LOGI("Starting a talking clock song now...", "");
     playTime();
 };
 
+
+
 //return to Menu
-void returnFromTalkingClock(){
+void returnFromTalkingClock()
+{
     ESP_LOGI("RETURN", "");
     launchHomeMenu();
 };
