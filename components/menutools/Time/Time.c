@@ -91,12 +91,10 @@ char *dest2_buff = "";
 char hourPlayed[4] = "";
 int firstRun = 1;
 
-void setOtherTime(){
-    setNewTime = 1;
-    vTaskDelay(100 / portTICK_PERIOD_MS);
-}
 
 void getZone(char *tz, char *Code ){
+    setNewTime = 1;
+    vTaskDelay(100 / portTICK_PERIOD_MS);
     TimeZone = tz;
     Location = Code;
     setNewTime = 0;
